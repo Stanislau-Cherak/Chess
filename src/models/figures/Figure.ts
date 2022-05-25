@@ -27,4 +27,12 @@ export class Figure {
     this.name=FigureNames.FIGURE;
     this.id=Math.random();
   }
+
+  canMove(target: Cell):boolean {
+    return true;
+  }
+
+  moveFigure(target:Cell) {
+    
+  }
 }
