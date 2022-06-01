@@ -44,7 +44,7 @@ const BoardComponent: React.FC<BoardProps> = ({ board, setBoard, currentPlayer, 
 
   return (
     <div>
-      <h4>
+      <h4 className="player">
         Current Player: {currentPlayer?.color}
       </h4>
       <div className="board">

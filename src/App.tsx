@@ -8,6 +8,7 @@ import { Colors } from './models/Colors';
 import BoardComponent from './components/BoardComponent';
 import LostFigures from './components/LostFigures';
 import Timer from './components/Timer';
+import Winner from './components/Winner';
 
 const App = () => {
 
@@ -15,6 +16,7 @@ const App = () => {
   const [whitePlayer, setWhitePlayer] = useState(new Player(Colors.WHITE));
   const [blackPlayer, setBlackPlayer] = useState(new Player(Colors.BLACK));
   const [currentPlayer, setCurrentPlayer] = useState<Player | null>(null);
+  const [winner, setWinner] = useState<Player | null>(null);
 
   useEffect(() => {
     restart();
@@ -26,34 +28,48 @@ const App = () => {
     newBoard.initCells();
     newBoard.addFigures();
     setBoard(newBoard);
+    setWinner(null);
   }
 
   function swapPlayer() {
     setCurrentPlayer(currentPlayer?.color === Colors.WHITE ? blackPlayer : whitePlayer);
   }
 
+  function winByTime(player: Player | null) {
+    setWinner(player?.color === Colors.WHITE ? blackPlayer : whitePlayer);
+  }
+
   return (
+
     <div className='app'>
+
       <Timer
-      currentPlayer={currentPlayer}
-      restart={restart}
-      />
-      <BoardComponent
-        board={board}
-        setBoard={setBoard}
         currentPlayer={currentPlayer}
-        swapPlayer={swapPlayer}
+        restart={restart}
+        winByTime={winByTime}
       />
+      <div className='main'>
+        <BoardComponent
+          board={board}
+          setBoard={setBoard}
+          currentPlayer={currentPlayer}
+          swapPlayer={swapPlayer}
+        />
+        {winner
+          ?
+          <Winner winner={winner} />
+          :
+          null}
+      </div>
       <div>
         <LostFigures
-        title='Black Figures'
-        figures={board.lostBlackFigures}
+          title='Black Figures'
+          figures={board.lostBlackFigures}
         />
         <LostFigures
-        title='White Figures'
-        figures={board.lostWhiteFigures}
+          title='White Figures'
+          figures={board.lostWhiteFigures}
         />
-
       </div>
     </div>
   );
