@@ -7,7 +7,7 @@ export enum FigureNames {
   KING = 'King',
   KNIGHT = 'Knight',
   PAWN = 'Pawn',
-  QUEEN = 'Quee',
+  QUEEN = 'Queen',
   ROOK = 'Rook',
   BISHOP = 'Bishop',
 }
@@ -39,6 +39,14 @@ export class Figure {
   }
 
   moveFigure(target: Cell) {
-
+    
   }
+
+  checkMove(target: Cell): boolean {
+    if (target.figure?.color === this.color) {
+      return false;
+    }    
+    return true;
+  }
+  
 }

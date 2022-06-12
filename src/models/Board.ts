@@ -1,17 +1,34 @@
 import { Cell } from "./Cell";
 import { Colors } from "./Colors";
 import { Bishop } from "./figures/Bishop";
-import { Figure } from "./figures/Figure";
+import { Figure, FigureNames } from "./figures/Figure";
 import { King } from "./figures/King";
 import { Knight } from "./figures/Knight";
 import { Pawn } from "./figures/Pawn";
 import { Queen } from "./figures/Queen";
 import { Rook } from "./figures/Rook";
 
+type check = {
+  check: boolean;
+  color: Colors|null;
+  cell: [number | null, number | null];
+  figure: FigureNames | null;
+  mate:boolean;
+
+}
+
 export class Board {
-  cells: Cell[][] = []
-  lostBlackFigures: Figure[]=[]
-  lostWhiteFigures: Figure[]=[]
+  cells: Cell[][] = [];
+  lostBlackFigures: Figure[] = [];
+  lostWhiteFigures: Figure[] = [];
+  check: check = {
+    check:false,
+    color:null,
+    cell: [null, null],
+    figure: null,
+    mate:false
+  }
+
 
   public initCells() {
     for (let i = 0; i < 8; i++) {
@@ -30,8 +47,9 @@ export class Board {
   public getCopyBoard(): Board {
     const newBoard = new Board();
     newBoard.cells = this.cells;
-    newBoard.lostBlackFigures=this.lostBlackFigures;
-    newBoard.lostWhiteFigures=this.lostWhiteFigures;
+    newBoard.lostBlackFigures = this.lostBlackFigures;
+    newBoard.lostWhiteFigures = this.lostWhiteFigures;
+
     return newBoard;
   }
 
@@ -55,7 +73,6 @@ export class Board {
       new Pawn(Colors.WHITE, this.getCell(i, 6));
     }
   }
-
   private addBishops() {
     new Bishop(Colors.BLACK, this.getCell(2, 0));
     new Bishop(Colors.BLACK, this.getCell(5, 0));
@@ -82,7 +99,6 @@ export class Board {
     new Rook(Colors.WHITE, this.getCell(0, 7));
     new Rook(Colors.WHITE, this.getCell(7, 7));
   }
-
   public addFigures() {
     this.addBishops();
     this.addKings();
@@ -91,4 +107,6 @@ export class Board {
     this.addQueens();
     this.addRooks();
   }
+
+
 }

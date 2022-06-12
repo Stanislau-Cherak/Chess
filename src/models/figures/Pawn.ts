@@ -17,12 +17,10 @@ export class Pawn extends Figure {
   }
 
   canMove(target: Cell): boolean {
-    if (!super.canMove(target)) {
+    if (!super.canMove(target))
       return false;
-    }
-
-    const direction = this.cell.figure?.color === Colors.BLACK ? 1 : -1;
-    const firstStepDirection = this.cell.figure?.color === Colors.BLACK ? 2 : -2;
+    const direction = this.cell.figure?.color === Colors.BLACK ? 1 : -1
+    const firstStepDirection = this.cell.figure?.color === Colors.BLACK ? 2 : -2
 
     if ((target.y === this.cell.y + direction || this.isFirstStep
       && (target.y === this.cell.y + firstStepDirection))
@@ -30,6 +28,21 @@ export class Pawn extends Figure {
       && this.cell.board.getCell(target.x, target.y).isEmpty()) {
       return true;
     }
+
+    if (target.y === this.cell.y + direction
+      && (target.x === this.cell.x + 1 || target.x === this.cell.x - 1)
+      && this.cell.isEnemy(target)) {
+      return true;
+    }
+
+    return false;
+  }
+
+  checkMove(target: Cell): boolean {
+    if (!super.checkMove(target))
+      return false;
+    const direction = this.cell.figure?.color === Colors.BLACK ? 1 : -1
+
     if (target.y === this.cell.y + direction
       && (target.x === this.cell.x + 1 || target.x === this.cell.x - 1)
       && this.cell.isEnemy(target)) {
@@ -38,7 +51,7 @@ export class Pawn extends Figure {
     return false;
   }
 
-  moveFigure(target: Cell): void {
+  moveFigure(target: Cell) {
     super.moveFigure(target);
     this.isFirstStep = false;
   }

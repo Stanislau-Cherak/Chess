@@ -13,12 +13,61 @@ export class King extends Figure {
   }
 
   canMove(target: Cell): boolean {
+
+    const dx = Math.abs(this.cell.x - target.x);
+    const dy = Math.abs(this.cell.y - target.y);
+
     if (!super.canMove(target)) {
       return false;
     }
 
-    const dx = Math.abs(this.cell.x - target.x);
-    const dy = Math.abs(this.cell.y - target.y);
+    for (const row of this.cell.board.cells) {
+      for (const cell of row) {
+        if (cell.figure
+          &&
+          cell.figure?.name !== FigureNames.KING
+          &&
+          cell.figure?.name !== FigureNames.PAWN
+          &&
+          cell.figure?.color !== this.color
+          &&
+          cell.figure.canMove(target)
+        ) {
+          return false;
+        }
+        if (cell.figure?.name === FigureNames.PAWN
+          &&
+          cell.figure?.color === Colors.WHITE
+          &&
+          this.color === Colors.BLACK
+          &&
+          ((target.x === cell.x + 1 || target.x === cell.x - 1) && target.y - cell.y === -1)) {
+          return false;
+        }
+        if (cell.figure?.name === FigureNames.PAWN
+          &&
+          cell.figure?.color === Colors.BLACK
+          &&
+          this.color === Colors.WHITE
+          &&
+          ((target.x === cell.x + 1 || target.x === cell.x - 1) && target.y - cell.y === 1)) {
+          return false;
+        }
+      }
+    }
+
+    if (this.cell.board.check.check
+      &&      
+      this.cell.board.check.figure === FigureNames.QUEEN
+      &&
+      target.figure?.name !== FigureNames.QUEEN
+      &&
+      ((dx === 1 && dy === 0) || (dy === 1 && dx === 0))
+    ) {
+      return false;
+    }
+
+
 
     if ((dx <= 1) && (dy <= 1)) {
       return true;

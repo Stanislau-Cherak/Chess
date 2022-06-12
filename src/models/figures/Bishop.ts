@@ -23,4 +23,14 @@ export class Bishop extends Figure {
     return false;
   }
 
+  checkMove(target: Cell): boolean {
+    if (!super.checkMove(target)) {
+      return false;
+    }
+    if (this.cell.isEmptyDiagonal(target)) {
+      return true;
+    }
+    return false;
+  }
+
 }
