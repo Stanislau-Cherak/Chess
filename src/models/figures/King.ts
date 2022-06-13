@@ -57,17 +57,77 @@ export class King extends Figure {
     }
 
     if (this.cell.board.check.check
-      &&      
+      &&
       this.cell.board.check.figure === FigureNames.QUEEN
       &&
       target.figure?.name !== FigureNames.QUEEN
       &&
-      ((dx === 1 && dy === 0) || (dy === 1 && dx === 0))
+      this.cell.board.check.cell[0]
+      &&
+      this.cell.board.check.cell[1]
     ) {
-      return false;
+      if (Math.abs(this.cell.board.check.cell[0] - this.cell.x) === Math.abs(this.cell.board.check.cell[1] - this.cell.y)
+        &&
+        Math.abs(this.cell.board.check.cell[0] - target.x) === Math.abs(this.cell.board.check.cell[1] - target.y)
+      ) {
+        console.log('check')
+        return false
+      }
+      if (this.cell.board.check.cell[0] - this.cell.x === 0
+        &&
+        this.cell.board.check.cell[0] - target.x === 0
+      ) {
+        return false
+      }
+      if (this.cell.board.check.cell[1] - this.cell.y === 0
+        &&
+        this.cell.board.check.cell[1] - target.y === 0
+      ) {
+        return false
+      }
+
     }
 
+    if (this.cell.board.check.check
+      &&
+      this.cell.board.check.figure === FigureNames.ROOK
+      &&
+      target.figure?.name !== FigureNames.ROOK
+      &&
+      this.cell.board.check.cell[0]
+      &&
+      this.cell.board.check.cell[1]
+    ) {
+      if (this.cell.board.check.cell[0] - this.cell.x === 0
+        &&
+        this.cell.board.check.cell[0] - target.x === 0
+      ) {
+        return false
+      }
+      if (this.cell.board.check.cell[1] - this.cell.y === 0
+        &&
+        this.cell.board.check.cell[1] - target.y === 0
+      ) {
+        return false
+      }
+    }
 
+    if (this.cell.board.check.check
+      &&
+      this.cell.board.check.figure === FigureNames.BISHOP
+      &&
+      target.figure?.name !== FigureNames.BISHOP
+      &&
+      this.cell.board.check.cell[0]
+      &&
+      this.cell.board.check.cell[1]
+      &&
+      Math.abs(this.cell.board.check.cell[0] - this.cell.x) === Math.abs(this.cell.board.check.cell[1] - this.cell.y)
+      &&
+      Math.abs(this.cell.board.check.cell[0] - target.x) === Math.abs(this.cell.board.check.cell[1] - target.y)
+    ) {
+      return false
+    }
 
     if ((dx <= 1) && (dy <= 1)) {
       return true;
@@ -75,5 +135,4 @@ export class King extends Figure {
 
     return false;
   }
-
 }

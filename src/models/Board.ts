@@ -49,6 +49,7 @@ export class Board {
     newBoard.cells = this.cells;
     newBoard.lostBlackFigures = this.lostBlackFigures;
     newBoard.lostWhiteFigures = this.lostWhiteFigures;
+    newBoard.check=this.check;
 
     return newBoard;
   }
@@ -106,6 +107,27 @@ export class Board {
     this.addPawns();
     this.addQueens();
     this.addRooks();
+  }
+
+  checkKing(cell: Cell) {
+    for (const row of this.cells) {
+      for (const target of row) {
+        if (cell.figure?.checkMove(target)
+          && (cell.figure.name !== FigureNames.KING)
+          && (target.figure?.name === FigureNames.KING)
+        ) {
+          this.check.check = true;
+          this.check.color = target.figure.color;
+          this.check.cell = [cell.x, cell.y];
+          this.check.figure = cell.figure.name;
+          return;
+        }
+      }
+    }
+    this.check.check = false;
+    this.check.color = null;
+    this.check.cell = [null, null];
+    this.check.figure = null;
   }
 
 

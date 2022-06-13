@@ -92,42 +92,16 @@ export class Cell {
       : this.board.lostWhiteFigures.push(figure);
   }
 
-  checkKing(cell: Cell) {
-    for (const row of this.board.cells) {
-      for (const target of row) {
-        if (cell.figure?.checkMove(target)
-          && (cell.figure.name !== FigureNames.KING)
-          && (target.figure?.name === FigureNames.KING)
-        ) {
-          this.board.check.check = true;
-          this.board.check.color = target.figure.color;
-          this.board.check.cell = [cell.x, cell.y];
-          this.board.check.figure = cell.figure.name;
-        }
-      }
-    }
-  }
-
   moveFigure(target: Cell) {
     if (this.figure && this.figure?.canMove(target)) {
       this.figure.moveFigure(target);
       if (target.figure) {
         this.addLostFigure(target.figure);
       }
-      target.setFigure(this.figure);
-      if (this.board.check.check
-        &&
-        (target.x === this.board.check.cell[0] && target.y === this.board.check.cell[1])
-        &&
-        this.figure.color === this.board.check.color) {
-        this.board.check.check = false;
-        this.board.check.color = null;
-        this.board.check.cell = [null, null];
-        this.board.check.figure = null;
-      }
+      target.setFigure(this.figure);      
     }
     this.figure = null;
-    this.checkKing(target);
+    this.board.checkKing(target);
   }
 }
 
