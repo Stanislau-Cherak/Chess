@@ -10,10 +10,10 @@ import { Rook } from "./figures/Rook";
 
 type check = {
   check: boolean;
-  color: Colors|null;
+  color: Colors | null;
   cell: [number | null, number | null];
   figure: FigureNames | null;
-  mate:boolean;
+  mate: boolean;
 
 }
 
@@ -22,11 +22,11 @@ export class Board {
   lostBlackFigures: Figure[] = [];
   lostWhiteFigures: Figure[] = [];
   check: check = {
-    check:false,
-    color:null,
+    check: false,
+    color: null,
     cell: [null, null],
     figure: null,
-    mate:false
+    mate: false,
   }
 
 
@@ -49,7 +49,7 @@ export class Board {
     newBoard.cells = this.cells;
     newBoard.lostBlackFigures = this.lostBlackFigures;
     newBoard.lostWhiteFigures = this.lostWhiteFigures;
-    newBoard.check=this.check;
+    newBoard.check = this.check;
 
     return newBoard;
   }
@@ -109,7 +109,47 @@ export class Board {
     this.addRooks();
   }
 
+  canKingMove(x: number, y: number): boolean {
+    for (const row of this.cells) {
+      for (const target of row) {
+        if (this.getCell(x, y).figure?.canMove(target)) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
   checkKing(cell: Cell) {
+
+    if (this.check.check
+      &&
+      this.check.cell[0] === cell.x
+      &&
+      this.check.cell[1] === cell.y
+    ) {
+      this.check.check = false;
+      this.check.color = null;
+      this.check.cell = [null, null];
+      this.check.figure = null;
+    }
+
+    if (this.check.check
+      &&
+      cell.figure?.name === FigureNames.KING
+      &&
+      cell.figure.color === this.check.color
+    ) {
+      this.check.check = false;
+      this.check.color = null;
+      this.check.cell = [null, null];
+      this.check.figure = null;
+    }
+
+    if (this.check.check) {
+      this.check.mate = true;
+    }
+
     for (const row of this.cells) {
       for (const target of row) {
         if (cell.figure?.checkMove(target)
@@ -120,15 +160,11 @@ export class Board {
           this.check.color = target.figure.color;
           this.check.cell = [cell.x, cell.y];
           this.check.figure = cell.figure.name;
-          return;
+          if (!this.canKingMove(target.x, target.y)) {
+            this.check.mate = true;
+          }
         }
       }
     }
-    this.check.check = false;
-    this.check.color = null;
-    this.check.cell = [null, null];
-    this.check.figure = null;
   }
-
-
 }

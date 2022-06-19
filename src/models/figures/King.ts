@@ -16,6 +16,14 @@ export class King extends Figure {
 
     const dx = Math.abs(this.cell.x - target.x);
     const dy = Math.abs(this.cell.y - target.y);
+    const check = this.cell.board.check.check;
+    const checkFigure = this.cell.board.check.figure;
+    const checkX = this.cell.board.check.cell[0];
+    const checkY = this.cell.board.check.cell[1];
+
+    if (this.cell.board.check.mate) {
+      return false;
+    }
 
     if (!super.canMove(target)) {
       return false;
@@ -31,11 +39,11 @@ export class King extends Figure {
           &&
           cell.figure?.color !== this.color
           &&
-          cell.figure.canMove(target)
+          cell.figure.checkMove(target)
         ) {
           return false;
         }
-        if (cell.figure?.name === FigureNames.PAWN
+        if ((cell.figure?.name === FigureNames.PAWN || cell.figure?.name === FigureNames.KING)
           &&
           cell.figure?.color === Colors.WHITE
           &&
@@ -44,7 +52,7 @@ export class King extends Figure {
           ((target.x === cell.x + 1 || target.x === cell.x - 1) && target.y - cell.y === -1)) {
           return false;
         }
-        if (cell.figure?.name === FigureNames.PAWN
+        if ((cell.figure?.name === FigureNames.PAWN || cell.figure?.name === FigureNames.KING)
           &&
           cell.figure?.color === Colors.BLACK
           &&
@@ -56,77 +64,62 @@ export class King extends Figure {
       }
     }
 
-    if (this.cell.board.check.check
+    if (check
       &&
-      this.cell.board.check.figure === FigureNames.QUEEN
+      checkX
       &&
-      target.figure?.name !== FigureNames.QUEEN
+      checkY
       &&
-      this.cell.board.check.cell[0]
+      checkX === target.x
       &&
-      this.cell.board.check.cell[1]
+      checkY === target.y
     ) {
-      if (Math.abs(this.cell.board.check.cell[0] - this.cell.x) === Math.abs(this.cell.board.check.cell[1] - this.cell.y)
-        &&
-        Math.abs(this.cell.board.check.cell[0] - target.x) === Math.abs(this.cell.board.check.cell[1] - target.y)
-      ) {
-        console.log('check')
-        return false
-      }
-      if (this.cell.board.check.cell[0] - this.cell.x === 0
-        &&
-        this.cell.board.check.cell[0] - target.x === 0
-      ) {
-        return false
-      }
-      if (this.cell.board.check.cell[1] - this.cell.y === 0
-        &&
-        this.cell.board.check.cell[1] - target.y === 0
-      ) {
-        return false
-      }
-
+      return true
     }
 
-    if (this.cell.board.check.check
+    if (check
       &&
-      this.cell.board.check.figure === FigureNames.ROOK
+      checkFigure === FigureNames.QUEEN
       &&
-      target.figure?.name !== FigureNames.ROOK
+      checkX
       &&
-      this.cell.board.check.cell[0]
+      checkY
       &&
-      this.cell.board.check.cell[1]
+      (this.cell.board.getCell(checkX, checkY).isEmptyDiagonal(target)
+        ||
+        this.cell.board.getCell(checkX, checkY).isEmptyHorizontal(target)
+        ||
+        this.cell.board.getCell(checkX, checkY).isEmptyVertical(target)
+      )
     ) {
-      if (this.cell.board.check.cell[0] - this.cell.x === 0
-        &&
-        this.cell.board.check.cell[0] - target.x === 0
-      ) {
-        return false
-      }
-      if (this.cell.board.check.cell[1] - this.cell.y === 0
-        &&
-        this.cell.board.check.cell[1] - target.y === 0
-      ) {
-        return false
-      }
+      return false;
     }
 
-    if (this.cell.board.check.check
+    if (check
       &&
-      this.cell.board.check.figure === FigureNames.BISHOP
+      checkFigure === FigureNames.BISHOP
       &&
-      target.figure?.name !== FigureNames.BISHOP
+      checkX
       &&
-      this.cell.board.check.cell[0]
+      checkY
       &&
-      this.cell.board.check.cell[1]
+      this.cell.board.getCell(checkX, checkY).isEmptyDiagonal(target)) {
+      return false;
+    }
+
+    if (check
       &&
-      Math.abs(this.cell.board.check.cell[0] - this.cell.x) === Math.abs(this.cell.board.check.cell[1] - this.cell.y)
+      checkFigure === FigureNames.ROOK
       &&
-      Math.abs(this.cell.board.check.cell[0] - target.x) === Math.abs(this.cell.board.check.cell[1] - target.y)
-    ) {
-      return false
+      checkX
+      &&
+      checkY
+      &&
+      (this.cell.board.getCell(checkX, checkY).isEmptyHorizontal(target)
+        ||
+        this.cell.board.getCell(checkX, checkY).isEmptyVertical(target)
+      )) {
+      return false;
     }
 
     if ((dx <= 1) && (dy <= 1)) {
