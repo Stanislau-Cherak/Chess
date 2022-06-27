@@ -20,7 +20,7 @@ const App = () => {
 
   useEffect(() => {
     restart();
-  }, [])
+  }, []);
 
   function restart() {
     const newBoard = new Board();
@@ -29,6 +29,15 @@ const App = () => {
     setBoard(newBoard);
     setCurrentPlayer(whitePlayer);
     setWinner(null);
+  }
+
+  function start() {
+    const newBoard = new Board();
+    newBoard.start = true;
+    newBoard.initCells();
+    newBoard.addFigures();
+    setBoard(newBoard);
+    setCurrentPlayer(whitePlayer);
   }
 
   function swapPlayer() {
@@ -45,6 +54,7 @@ const App = () => {
 
       <Timer
         currentPlayer={currentPlayer}
+        start={start}
         restart={restart}
         winByTime={winByTime}
       />

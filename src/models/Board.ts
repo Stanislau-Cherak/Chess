@@ -19,6 +19,7 @@ type check = {
 
 export class Board {
   cells: Cell[][] = [];
+  start: boolean = false;
   lostBlackFigures: Figure[] = [];
   lostWhiteFigures: Figure[] = [];
   check: check = {
@@ -47,10 +48,10 @@ export class Board {
   public getCopyBoard(): Board {
     const newBoard = new Board();
     newBoard.cells = this.cells;
+    newBoard.start=this.start;
     newBoard.lostBlackFigures = this.lostBlackFigures;
     newBoard.lostWhiteFigures = this.lostWhiteFigures;
     newBoard.check = this.check;
-
     return newBoard;
   }
 

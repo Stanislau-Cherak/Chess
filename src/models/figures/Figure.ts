@@ -29,6 +29,9 @@ export class Figure {
   }
 
   canMove(target: Cell): boolean {
+    if (!this.cell.board.start) {
+      return false;
+    }
     if (target.figure?.color === this.color) {
       return false;
     }
