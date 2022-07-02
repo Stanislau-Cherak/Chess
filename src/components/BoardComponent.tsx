@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Board } from "../models/Board";
 import { Cell } from "../models/Cell";
+import { Colors } from "../models/Colors";
 import { Player } from "../models/Player";
+import { winByType } from "../models/Winner";
 
 import CellComponent from "./CellComponent";
 
@@ -10,9 +12,10 @@ interface BoardProps {
   currentPlayer: Player | null;
   setBoard: (board: Board) => void;
   swapPlayer: () => void;
+  winByMate: (player: Player | null, winBy: winByType) => void,
 }
 
-const BoardComponent: React.FC<BoardProps> = ({ board, setBoard, currentPlayer, swapPlayer }) => {
+const BoardComponent: React.FC<BoardProps> = ({ board, setBoard, currentPlayer, swapPlayer, winByMate }) => {
 
   const [selectedCell, setSelectedCell] = useState<Cell | null>(null);
 
@@ -41,6 +44,15 @@ const BoardComponent: React.FC<BoardProps> = ({ board, setBoard, currentPlayer, 
   useEffect(() => {
     highlightCell();
   }, [selectedCell])
+
+  useEffect(() => {
+    if (board.check.mate && board.check.color === Colors.WHITE) {
+      winByMate(new Player(Colors.BLACK), 'mate');
+    }
+    if (board.check.mate && board.check.color === Colors.BLACK) {
+      winByMate(new Player(Colors.WHITE), 'mate');
+    }
+  }, [board])
 
   return (
     <div>

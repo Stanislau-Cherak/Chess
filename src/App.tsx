@@ -4,11 +4,13 @@ import './App.css'
 import { Board } from './models/Board';
 import { Player } from './models/Player';
 import { Colors } from './models/Colors';
+import { Winner } from './models/Winner';
+import { winByType } from './models/Winner';
 
 import BoardComponent from './components/BoardComponent';
 import LostFigures from './components/LostFigures';
-import Timer from './components/Timer';
-import Winner from './components/Winner';
+import WinnerComponent from './components/WinnerComponent';
+import TimerComponent from './components/TimerComponent';
 
 const App = () => {
 
@@ -16,7 +18,7 @@ const App = () => {
   const [whitePlayer, setWhitePlayer] = useState(new Player(Colors.WHITE));
   const [blackPlayer, setBlackPlayer] = useState(new Player(Colors.BLACK));
   const [currentPlayer, setCurrentPlayer] = useState<Player | null>(null);
-  const [winner, setWinner] = useState<Player | null>(null);
+  const [winner, setWinner] = useState<Winner>(new Winner(null, null));
 
   useEffect(() => {
     restart();
@@ -28,7 +30,7 @@ const App = () => {
     newBoard.addFigures();
     setBoard(newBoard);
     setCurrentPlayer(whitePlayer);
-    setWinner(null);
+    setWinner(new Winner(null, null));
   }
 
   function start() {
@@ -44,19 +46,19 @@ const App = () => {
     setCurrentPlayer(currentPlayer?.color === Colors.WHITE ? blackPlayer : whitePlayer);
   }
 
-  function winByTime(player: Player | null) {
-    setWinner(player?.color === Colors.WHITE ? blackPlayer : whitePlayer);
+  function setVictorious(player: Player | null, winBy: winByType) {
+    setWinner(new Winner(player, winBy));
   }
 
   return (
 
     <div className='app'>
 
-      <Timer
+      <TimerComponent
         currentPlayer={currentPlayer}
         start={start}
         restart={restart}
-        winByTime={winByTime}
+        winByTime={setVictorious}
       />
       <div className='main'>
         <BoardComponent
@@ -64,10 +66,13 @@ const App = () => {
           setBoard={setBoard}
           currentPlayer={currentPlayer}
           swapPlayer={swapPlayer}
+          winByMate={setVictorious}
         />
-        {winner
+        {winner.player
           ?
-          <Winner winner={winner} />
+          <WinnerComponent
+            winner={winner}
+          />
           :
           null}
       </div>

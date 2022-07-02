@@ -1,15 +1,16 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Colors } from "../models/Colors";
 import { Player } from "../models/Player";
+import { winByType } from '../models/Winner';
 
 interface TimerProps {
   currentPlayer: Player | null,
   start: () => void,
   restart: () => void,
-  winByTime: (player: Player | null) => void,
+  winByTime: (player: Player | null, winBy: winByType) => void,
 }
 
-const Timer: React.FC<TimerProps> = ({ currentPlayer, start, restart, winByTime }) => {
+const TimerComponent: React.FC<TimerProps> = ({ currentPlayer, start, restart, winByTime }) => {
 
   const [blackTime, setBlackTime] = useState(1500);
   const [whiteTime, setWhiteTime] = useState(1500);
@@ -24,7 +25,8 @@ const Timer: React.FC<TimerProps> = ({ currentPlayer, start, restart, winByTime 
 
   useEffect(() => {
     if (whiteTime <= 0 || blackTime <= 0) {
-      winByTime(currentPlayer);
+      const winner = currentPlayer?.color === Colors.WHITE ? new Player(Colors.BLACK) : new Player(Colors.WHITE);
+      winByTime(winner, 'time');
       stopTimer();
     }
   }, [whiteTime, blackTime])
@@ -88,4 +90,4 @@ const Timer: React.FC<TimerProps> = ({ currentPlayer, start, restart, winByTime 
   )
 }
 
-export default Timer;
+export default TimerComponent;
