@@ -7,10 +7,11 @@ interface TimerProps {
   currentPlayer: Player | null,
   start: () => void,
   restart: () => void,
+  stop: boolean,
   winByTime: (player: Player | null, winBy: winByType) => void,
 }
 
-const TimerComponent: React.FC<TimerProps> = ({ currentPlayer, start, restart, winByTime }) => {
+const TimerComponent: React.FC<TimerProps> = ({ currentPlayer, start, restart, stop, winByTime }) => {
 
   const [blackTime, setBlackTime] = useState(1500);
   const [whiteTime, setWhiteTime] = useState(1500);
@@ -27,6 +28,9 @@ const TimerComponent: React.FC<TimerProps> = ({ currentPlayer, start, restart, w
     if (whiteTime <= 0 || blackTime <= 0) {
       const winner = currentPlayer?.color === Colors.WHITE ? new Player(Colors.BLACK) : new Player(Colors.WHITE);
       winByTime(winner, 'time');
+      stopTimer();
+    }
+    if (stop) {
       stopTimer();
     }
   }, [whiteTime, blackTime])
@@ -70,20 +74,20 @@ const TimerComponent: React.FC<TimerProps> = ({ currentPlayer, start, restart, w
 
   return (
     <div className="timer">
-      <div>
-        <button
+      <div className="buttons-section">
+        <div className="button start-button"
           onClick={handleStart}
         >Start Game
-        </button>
-        <button
+        </div>
+        <div className="button restart-button"
           onClick={handleRestart}
         >Restart Game
-        </button>
+        </div>
       </div>
-      <h3>
+      <h3 className="timer-title">
         Black - {blackTime}
       </h3>
-      <h3>
+      <h3 className="timer-title">
         White - {whiteTime}
       </h3>
     </div>

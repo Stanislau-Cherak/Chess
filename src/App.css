@@ -59,17 +59,66 @@
   background-color: lightgray;
 }
 
+.lost-figure {
+  display: flex;
+  margin: 10px 7px;
+}
+
 .timer {
   margin-right: 15px;
 }
 
-.player{
+.player {
   margin-bottom: 25px;
 }
 
-.winner{
+.winner {
   margin-top: 25px;
   font-size: 18px;
+  font-weight: 700;
   color: red;
   text-align: center;
+}
+
+.buttons-section {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 25px;
+}
+
+.button {
+  cursor: pointer;
+  margin-bottom: 15px;
+  background-color: white;
+  padding: 5px 15px;
+  text-align: center;
+  border: 1px solid black;
+  border-radius: 5px;
+  font-size: 18px;
+  font-weight: 700;
+  transition: all 0.5s ease 0s;
+}
+
+.start-button {
+  background: #00FF00;
+}
+
+.start-button:hover,
+.start-button:focus {
+  color: white;
+  background: #006400;
+}
+
+.restart-button {
+  background-color: LightCoral;
+}
+
+.restart-button:hover,
+.restart-button:focus {
+  color: white;
+  background: DarkRed;
+}
+
+.timer-title {
+  margin-bottom: 15px;
 }

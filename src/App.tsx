@@ -58,6 +58,7 @@ const App = () => {
         currentPlayer={currentPlayer}
         start={start}
         restart={restart}
+        stop={board.check.mate}
         winByTime={setVictorious}
       />
       <div className='main'>
