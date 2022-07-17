@@ -64,7 +64,8 @@ const TimerComponent: React.FC<TimerProps> = ({ currentPlayer, start, restart, s
   const handleRestart = () => {
     setWhiteTime(1500);
     setBlackTime(1500);
-    restart()
+    restart();
+    stopTimer();
   }
 
   const handleStart = () => {
